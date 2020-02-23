@@ -1,32 +1,53 @@
 
 package com.vmware.logger.model;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({
+        "lat",
+        "lng"
+})
 public class Geo {
 
-    @SerializedName("lat")
-    @Expose
+    @JsonProperty("lat")
     private String lat;
-    @SerializedName("lng")
-    @Expose
+    @JsonProperty("lng")
     private String lng;
+    @JsonIgnore
+    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
+    @JsonProperty("lat")
     public String getLat() {
         return lat;
     }
 
+    @JsonProperty("lat")
     public void setLat(String lat) {
         this.lat = lat;
     }
 
+    @JsonProperty("lng")
     public String getLng() {
         return lng;
     }
 
+    @JsonProperty("lng")
     public void setLng(String lng) {
         this.lng = lng;
+    }
+
+    @JsonAnyGetter
+    public Map<String, Object> getAdditionalProperties() {
+        return this.additionalProperties;
+    }
+
+    @JsonAnySetter
+    public void setAdditionalProperty(String name, Object value) {
+        this.additionalProperties.put(name, value);
     }
 
 }
