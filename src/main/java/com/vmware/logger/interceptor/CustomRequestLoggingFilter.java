@@ -140,6 +140,8 @@ public class CustomRequestLoggingFilter extends CommonsRequestLoggingFilter {
 
             }
         }
+        // To avoid print response data
+//        payload="";
         return payload;
     }
 
@@ -205,13 +207,15 @@ public class CustomRequestLoggingFilter extends CommonsRequestLoggingFilter {
     //@Override
     protected void afterRequest(HttpServletResponse response, long id, long startTime) {
         final StringBuilder b = new StringBuilder();
-        printResponseLine(b, "Server responded with a response : Live Thread Count " + liveReqCounter.get() + " : ", id, response.getStatus(), startTime);
+        printResponseLine(b, "API responded with a response : Live Thread Count " + liveReqCounter.get() + " : ",
+                id, response.getStatus(), startTime);
         printResponseHeaders(b, id, response);
         b.append(getResponseContent(response));
         logger.debug("" + b + DELIMITER);
     }
 
     private void printResponseHeaders(StringBuilder b, long id, HttpServletResponse response) {
+
         Collection<String> headerNames = response.getHeaderNames();
         for (String header : headerNames) {
             prefixId(b, id).append(RESPONSE_PREFIX).append(header).append(": ").
@@ -221,13 +225,17 @@ public class CustomRequestLoggingFilter extends CommonsRequestLoggingFilter {
     }
 
     private void printResponseLine(final StringBuilder b, final String note, final long id, final int status, long startTime) {
+
         prefixId(b, id).append(NOTIFICATION_PREFIX).append(note);
+
         b.append(LogUtil.getCurrentHeapSize())
                 .append(LogUtil.getMaxHeapSize())
                 .append(LogUtil.getFreeHeapSize())
-                .append("\t Time taken millisec: " + (System.currentTimeMillis() - startTime))
+                .append("\t Time taken in MS: " + (System.currentTimeMillis() - startTime))
                 .append(DELIMITER);
-        prefixId(b, id).append(RESPONSE_PREFIX).append(Integer.toString(status)).append(DELIMITER);
+        prefixId(b, id).append(RESPONSE_PREFIX)
+                .append(Integer.toString(status))
+                .append(DELIMITER);
     }
 
     private StringBuilder prefixId(final StringBuilder b, final long id) {
@@ -235,7 +243,8 @@ public class CustomRequestLoggingFilter extends CommonsRequestLoggingFilter {
         return b;
     }
 
-    private void printRequestHeaders(StringBuilder b, Enumeration<String> headerNames, HttpServletRequest request, long id) {
+    private void printRequestHeaders(StringBuilder b, Enumeration<String> headerNames,
+                                     HttpServletRequest request, long id) {
 
         while (headerNames.hasMoreElements()) {
             String header = headerNames.nextElement();

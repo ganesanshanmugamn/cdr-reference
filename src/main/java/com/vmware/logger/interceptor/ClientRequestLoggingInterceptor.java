@@ -20,13 +20,15 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class ClientRequestLoggingInterceptor implements ClientHttpRequestInterceptor {
 
+    private static final Logger log = LoggerFactory.getLogger(ClientRequestLoggingInterceptor.class);
+
+
     public static final String NOTIFICATION_PREFIX = "* ";
     public static final String REQUEST_PREFIX = ">";
     public static final String RESPONSE_PREFIX = "< ";
     public static final String CLIENT_RESPONDED_WITH_A_RESPONSE_LIVE_THREAD_COUNT = "Client responded with a response  : Live Client Count ";
     public static final String CLIENT_REQUEST_HAS_BEEN_INITIATED_LIVE_THREAD_COUNT = "Client request has been initiated : Live Client Count ";
     private static final String DELIMITER = "::";
-    private static final Logger log = LoggerFactory.getLogger(ClientRequestLoggingInterceptor.class);
     private static AtomicLong reqCounter = new AtomicLong(0);
     private static AtomicLong liveReqCounter = new AtomicLong(0);
     private boolean enableFullLog = true;
@@ -115,7 +117,10 @@ public class ClientRequestLoggingInterceptor implements ClientHttpRequestInterce
 
         if (enableFullLog) {
             appendHeaders(id, b, request.getHeaders(), REQUEST_PREFIX);
-            prefixId(b, id).append(REQUEST_PREFIX).append(DELIMITER);
+            prefixId(b, id)
+                    .append(REQUEST_PREFIX)
+                    .append(DELIMITER);
+
             b.append(new String(body, Charset.forName("UTF-8"))).append(DELIMITER);
             log.debug(b.toString());
         } else {
@@ -133,8 +138,11 @@ public class ClientRequestLoggingInterceptor implements ClientHttpRequestInterce
     private void appendHeaders(long id, StringBuilder b, HttpHeaders headers, String prefix) {
         Set<Entry<String, List<String>>> headerEntrySet = headers.entrySet();
         for (Entry<String, List<String>> entry : headerEntrySet) {
-            prefixId(b, id).append(prefix).append(entry.getKey()).append(": ").
-                    append(entry.getValue()).append(DELIMITER);
+            prefixId(b, id)
+                    .append(prefix)
+                    .append(entry.getKey()).append(": ")
+                    .append(entry.getValue())
+                    .append(DELIMITER);
         }
     }
 
