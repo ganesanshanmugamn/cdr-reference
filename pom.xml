@@ -67,6 +67,13 @@
 			<version>28.2-jre</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-client -->
+		<dependency>
+			<groupId>org.glassfish.jersey.core</groupId>
+			<artifactId>jersey-client</artifactId>
+			<version>2.30</version>
+		</dependency>
+
 
 	</dependencies>
 

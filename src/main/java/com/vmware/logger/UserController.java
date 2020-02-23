@@ -13,7 +13,7 @@ public class UserController {
 
 
     @Autowired
-    @Qualifier("RestTemplate")
+    @Qualifier("Jersey")
     APIClient restTemplate;
 
     @GetMapping("/")
