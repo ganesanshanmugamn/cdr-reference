@@ -1,7 +1,5 @@
 package com.vmware.logger.interceptor;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,18 +38,6 @@ public class LogUtil {
         return ExceptionUtils.getStackTrace(e).replaceAll("\n", ":::");
     }
 
-
-    public static String getOrderIdFromReqJson(String jsonreq) {
-        String orderId = "";
-
-        try {
-            JsonObject jsonObject = new JsonParser().parse(jsonreq).getAsJsonObject();
-            orderId = jsonObject.getAsJsonObject("order").get("id").getAsString();
-        } catch (Exception e1) {
-            logger.info("Exception details: " + LogUtil.getSingleLineErrorTrace(e1));
-        }
-        return orderId;
-    }
 
     public static String getcorrelationIdFromReq(HttpServletRequest request) {
         String transId = "";

@@ -1,11 +1,17 @@
 package com.vmware.logger;
 
+import com.vmware.logger.interceptor.ClientRequestLoggingInterceptor;
 import com.vmware.logger.interceptor.CustomRequestLoggingFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.client.BufferingClientHttpRequestFactory;
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
+
+import java.util.Collections;
 
 @SpringBootApplication
 public class LoggerApplication {
@@ -16,7 +22,10 @@ public class LoggerApplication {
 
     @Bean
     public RestTemplate restTemplate() {
-        RestTemplate restTemplate = new RestTemplate();
+        ClientHttpRequestFactory factory = new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory());
+        RestTemplate restTemplate = new RestTemplate(factory);
+        //Reference: https://objectpartners.com/2018/03/01/log-your-resttemplate-request-and-response-without-destroying-the-body/
+        restTemplate.setInterceptors(Collections.singletonList(new ClientRequestLoggingInterceptor()));
         return restTemplate;
     }
 

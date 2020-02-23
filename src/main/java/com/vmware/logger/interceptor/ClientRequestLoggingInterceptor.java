@@ -21,7 +21,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class ClientRequestLoggingInterceptor implements ClientHttpRequestInterceptor {
 
     public static final String NOTIFICATION_PREFIX = "* ";
-    public static final String REQUEST_PREFIX = "> ";
+    public static final String REQUEST_PREFIX = ">";
     public static final String RESPONSE_PREFIX = "< ";
     public static final String CLIENT_RESPONDED_WITH_A_RESPONSE_LIVE_THREAD_COUNT = "Client responded with a response  : Live Client Count ";
     public static final String CLIENT_REQUEST_HAS_BEEN_INITIATED_LIVE_THREAD_COUNT = "Client request has been initiated : Live Client Count ";
@@ -29,11 +29,7 @@ public class ClientRequestLoggingInterceptor implements ClientHttpRequestInterce
     private static final Logger log = LoggerFactory.getLogger(ClientRequestLoggingInterceptor.class);
     private static AtomicLong reqCounter = new AtomicLong(0);
     private static AtomicLong liveReqCounter = new AtomicLong(0);
-    private boolean enableFullLog;
-
-    public ClientRequestLoggingInterceptor(boolean enableFullLog) {
-        this.enableFullLog = enableFullLog;
-    }
+    private boolean enableFullLog = true;
 
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
@@ -65,13 +61,16 @@ public class ClientRequestLoggingInterceptor implements ClientHttpRequestInterce
     }
 
 
-    private void logAfterClientCall(HttpRequest request, ClientHttpResponse response, long id, long startTime) throws IOException {
+    private void logAfterClientCall(HttpRequest request,
+                                    ClientHttpResponse response,
+                                    long id, long startTime) throws IOException {
         final StringBuilder b = new StringBuilder();
 
         InputStream body = null;
         try {
             appendcounter(id, b, CLIENT_RESPONDED_WITH_A_RESPONSE_LIVE_THREAD_COUNT);
             appendMemoryDetails(b);
+
             prefixId(b, id)
                     .append(RESPONSE_PREFIX)
                     .append(request.getMethod())
@@ -146,7 +145,9 @@ public class ClientRequestLoggingInterceptor implements ClientHttpRequestInterce
     }
 
     private StringBuilder prefixId(final StringBuilder b, final long id) {
-        b.append("C").append(Long.toString(id)).append(" ");
+        b.append("C")
+                .append(Long.toString(id))
+                .append(" ");
         return b;
     }
 

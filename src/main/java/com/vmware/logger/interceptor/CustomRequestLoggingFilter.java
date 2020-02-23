@@ -144,8 +144,6 @@ public class CustomRequestLoggingFilter extends CommonsRequestLoggingFilter {
     }
 
 
-    //org.slf4j.MDC.put("transactionId", transactionId);
-
     @Override
     protected boolean shouldLog(HttpServletRequest request) {
         return logger.isDebugEnabled();
@@ -169,17 +167,14 @@ public class CustomRequestLoggingFilter extends CommonsRequestLoggingFilter {
 
             final byte[] entity = new byte[100000];
             int dataLengRead = readFully(in, entity);
-            String reqBody = new String(entity, 0, dataLengRead, "UTF-8").replaceAll("\n", "").replaceAll("\r", "").replaceAll("\r\n", "").replaceAll("\n\r", "");
+            String reqBody = new String(entity, 0, dataLengRead, "UTF-8")
+                    .replaceAll("\n", "").replaceAll("\r", "")
+                    .replaceAll("\r\n", "").replaceAll("\n\r", "");
 
 
-            String OrderID = LogUtil.getOrderIdFromReqJson(reqBody);
             String correlationId = LogUtil.getcorrelationIdFromReq(request);
-
-            MDC.put("transactionId", correlationId + ":" + OrderID);
-
+            MDC.put("transactionId", correlationId);
             b.append(reqBody);
-            //b.append("::");
-
             ((CustomContentCachingRequestWrapper) request).appendStream(entity, 0, dataLengRead);
 
         } catch (IOException ex) {
