@@ -3,6 +3,7 @@ package com.vmware.logger.model;
 
 import com.fasterxml.jackson.annotation.*;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,8 +18,9 @@ import java.util.Map;
         "website",
         "company"
 })
-public class User {
+public class User implements Serializable {
 
+    private static final long serialVersionUID = 7234843199759851414L;
     @JsonProperty("id")
     private Integer id;
     @JsonProperty("name")

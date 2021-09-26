@@ -1,6 +1,7 @@
 package com.vmware.logger.httpclient;
 
 import com.google.gson.Gson;
+import com.vmware.logger.model.User;
 import com.vmware.logger.model.UserList;
 import org.glassfish.jersey.client.ClientConfig;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,6 +15,8 @@ import javax.ws.rs.client.ClientBuilder;
 public class JerseyClient implements APIClient {
 
 
+    Gson gson = new Gson();
+
     private static Client createClient() {
         ClientConfig config = new ClientConfig();
         config.register(RequestClientWriterInterceptor.class);
@@ -22,12 +25,16 @@ public class JerseyClient implements APIClient {
 
     @Override
     public UserList getUsers() {
-        String response = createClient().target(USER_LIST)
+        return gson.fromJson(createClient().target(USER_LIST)
                 .request()
-                .get(String.class);
-        Gson gson = new Gson();
-        UserList users = gson.fromJson(response, UserList.class);
-        return users;
+                .get(String.class), UserList.class);
+    }
+
+    @Override
+    public User getUser(int id) {
+        return gson.fromJson(createClient().target(USER_LIST + id)
+                .request()
+                .get(String.class), User.class);
     }
 
 }

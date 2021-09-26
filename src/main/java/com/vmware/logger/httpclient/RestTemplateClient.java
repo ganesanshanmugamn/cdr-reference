@@ -23,5 +23,11 @@ public class RestTemplateClient implements APIClient {
         return new UserList(Arrays.asList(response));
     }
 
+    @Override
+    public User getUser(int id) {
+        return restTemplate
+                .getForObject(USER_LIST + id, User.class);
+    }
+
 
 }

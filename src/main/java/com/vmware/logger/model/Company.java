@@ -3,6 +3,7 @@ package com.vmware.logger.model;
 
 import com.fasterxml.jackson.annotation.*;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,8 +13,10 @@ import java.util.Map;
         "catchPhrase",
         "bs"
 })
-public class Company {
+public class Company implements Serializable {
 
+
+    private static final long serialVersionUID = 6020965818829034153L;
     @JsonProperty("name")
     private String name;
     @JsonProperty("catchPhrase")

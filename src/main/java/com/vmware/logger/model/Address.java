@@ -3,6 +3,7 @@ package com.vmware.logger.model;
 
 import com.fasterxml.jackson.annotation.*;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,8 +15,9 @@ import java.util.Map;
         "zipcode",
         "geo"
 })
-public class Address {
+public class Address implements Serializable {
 
+    private static final long serialVersionUID = -5399184032694557607L;
     @JsonProperty("street")
     private String street;
     @JsonProperty("suite")

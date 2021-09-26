@@ -3,6 +3,7 @@ package com.vmware.logger.model;
 
 import com.fasterxml.jackson.annotation.*;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,8 +12,10 @@ import java.util.Map;
         "lat",
         "lng"
 })
-public class Geo {
+public class Geo implements Serializable {
 
+
+    private static final long serialVersionUID = 5870214700887669327L;
     @JsonProperty("lat")
     private String lat;
     @JsonProperty("lng")
